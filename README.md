@@ -129,7 +129,7 @@ echo $token =  Jwt_Token::generate_jwt_token();
 // verify the token
 echo Jwt_Token::verify_jwt($token);
 
-// only verify the tokex expiration if it is expired
+// only verify the token expiration if it is expired
 echo Jwt_Token::verify_jwt_expiration($token);
 
 ```
@@ -144,9 +144,11 @@ echo Jwt_Token::verify_jwt_expiration($token);
 $payload = array(
     'sub'     => 'Api Key',
     'user_id' => 21,
+    'iat'     => time(),
     // Expire in 2 Min
     'exp'     => time()+ (60*2),
 );
+
 
 Jwt_Token::set_payload( $payload );
 
