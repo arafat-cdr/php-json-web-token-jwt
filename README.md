@@ -1,3 +1,5 @@
+## JWT (Json Web Token)
+
 > * The client application should store the JWT and send it with every request to the API. If the token is stolen, a malicious third party can impersonate the legitimate user for as long as the token is valid. Therefore, it’s crucial to take all possible measures to keep the token secure.
 
 > * There are two standard ways to store the token: 
@@ -111,3 +113,45 @@ $JWT_token = $headers_encoded . '.' . $payload_encoded .'.'. $signature_encoded;
 When a client sends this token to the server, the server can decode and validate the token using the secret key. It checks if the token's signature matches the computed signature, ensuring the token hasn't been tampered with and was issued by a trusted source. The server can then use the claims within the payload for various purposes, such as authentication and authorization.
 
 JWT is widely used due to its simplicity, self-contained nature, and ability to carry necessary information within the token itself. However, it's essential to implement JWT securely, protect the secret key, and handle token expiration and token refresh mechanisms to ensure a robust and secure authentication system.
+
+### How to use
+
+```php
+<?php
+
+# Checking the jwt code
+
+// This will return an example default
+// echo $token =  Jwt_Token::generate_jwt_token();
+
+// echo Jwt_Token::verify_jwt($token);
+
+// -----------------------------------------------
+
+// This will Show a real example of JWT
+
+// Setting Payload
+$payload = array(
+    'sub'     => 'Api Key',
+    'user_id' => 21,
+    // Expire in 2 Min
+    'exp'     => time()+ (60*2),
+);
+
+Jwt_Token::set_payload( $payload );
+
+// Setting Key
+Jwt_Token::set_key('MY_RANDOM_KEY');
+
+// Generating Token
+$token = Jwt_Token::generate_jwt_token();
+
+// echo $token;
+
+
+// Validating Token
+
+echo (Jwt_Token::verify_jwt('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJBcGkgS2V5IiwidXNlcl9pZCI6MjEsImV4cCI6MTY5MTMxODI3M30=.ODczMGNlMjA3YjZlZWIyZjk3ODE4MmJkYmU0N2I2ZjBjOGRhZGFlYzM2NDFkOTlkZGYyNWRlNjU3OTMxY2M0NQ=='));
+
+
+```
