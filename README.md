@@ -116,20 +116,30 @@ JWT is widely used due to its simplicity, self-contained nature, and ability to 
 
 ### How to use
 
+
+> #### Check How it look like a jwt token and verify jwt token and also verify expiration of the jwt token.
 ```php
 <?php
 
 # Checking the jwt code
 
 // This will return an example default
-// echo $token =  Jwt_Token::generate_jwt_token();
+echo $token =  Jwt_Token::generate_jwt_token();
 
-// echo Jwt_Token::verify_jwt($token);
+// verify the token
+echo Jwt_Token::verify_jwt($token);
 
-// -----------------------------------------------
+// only verify the tokex expiration if it is expired
+echo Jwt_Token::verify_jwt_expiration($token);
+
+```
+
+> ### Now Let's see a Real life example of the JWT token
+
+```php
+<?php
 
 // This will Show a real example of JWT
-
 // Setting Payload
 $payload = array(
     'sub'     => 'Api Key',
@@ -146,12 +156,14 @@ Jwt_Token::set_key('MY_RANDOM_KEY');
 // Generating Token
 $token = Jwt_Token::generate_jwt_token();
 
-// echo $token;
-
+echo $token;
 
 // Validating Token
-
 echo (Jwt_Token::verify_jwt('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJBcGkgS2V5IiwidXNlcl9pZCI6MjEsImV4cCI6MTY5MTMxODI3M30=.ODczMGNlMjA3YjZlZWIyZjk3ODE4MmJkYmU0N2I2ZjBjOGRhZGFlYzM2NDFkOTlkZGYyNWRlNjU3OTMxY2M0NQ=='));
 
+// checking if the token is expired or not yet expired
+echo Jwt_Token::verify_jwt_expiration('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJBcGkgS2V5IiwidXNlcl9pZCI6MjEsImV4cCI6MTY5MTMxODI3M30=.ODczMGNlMjA3YjZlZWIyZjk3ODE4MmJkYmU0N2I2ZjBjOGRhZGFlYzM2NDFkOTlkZGYyNWRlNjU3OTMxY2M0NQ==');
 
 ```
+
+>>> #### Happy coding .
