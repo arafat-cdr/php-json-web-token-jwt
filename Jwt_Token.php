@@ -1,8 +1,11 @@
 <?php
 
 /**
+ *
+ * @date 06/August/2023 
+ * @time 10:00 PM 
  * 
- * @package Jwt_token
+ * @package Jwt_Token
  * A simple JWT Token Generation and
  * validator 
  * @author: arafat.dml@gmail.com
@@ -186,49 +189,3 @@ static function verify_jwt($jwt_token) {
 }
 
 }
-
-# Checking the jwt code
-// ------------------------------------------------
-// This will return an example default
-// echo $token =  Jwt_Token::generate_jwt_token();
-
-// echo Jwt_Token::verify_jwt($token);
-
-// only verify the token expiration if it is expired
-// echo Jwt_Token::verify_jwt_expiration($token);
-
-// -----------------------------------------------
-
-// This will Show a real example of JWT
-// --------------------------------------------------
-// Setting Payload
-
-$payload = array(
-    'sub'     => 'Api Key',
-    'user_id' => 21,
-    'iat'     => time(),
-    // Expire in 2 Min
-    'exp'     => time()+ (60*2),
-);
-
-// Jwt_Token::set_payload( $payload );
-
-// Setting Key
-// Jwt_Token::set_key('MY_RANDOM_KEY');
-
-// Generating Token
-// $token = Jwt_Token::generate_jwt_token();
-
-// echo $token;
-
-
-// Validating Token
-
-// echo (Jwt_Token::verify_jwt('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJBcGkgS2V5IiwidXNlcl9pZCI6MjEsImV4cCI6MTY5MTMxODI3M30=.ODczMGNlMjA3YjZlZWIyZjk3ODE4MmJkYmU0N2I2ZjBjOGRhZGFlYzM2NDFkOTlkZGYyNWRlNjU3OTMxY2M0NQ=='));
-
-// checking the expiration of a jwt token
-// It will check only for the expiration of the jwt token
-
-echo Jwt_Token::verify_jwt_expiration('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJBcGkgS2V5IiwidXNlcl9pZCI6MjEsImV4cCI6MTY5MTMxODI3M30=.ODczMGNlMjA3YjZlZWIyZjk3ODE4MmJkYmU0N2I2ZjBjOGRhZGFlYzM2NDFkOTlkZGYyNWRlNjU3OTMxY2M0NQ==');
-
-// --------------------------------------------------

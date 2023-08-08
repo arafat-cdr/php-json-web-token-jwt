@@ -168,4 +168,165 @@ echo Jwt_Token::verify_jwt_expiration('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJz
 
 ```
 
+### So How to Use this JWT_Token To A Api Auth ?
+
+Let's talk about it .
+
+I write a very simple class called **Wp_Jwt_Auth** This has some **static** methods That can use to verify auth
+
+Let's see how to do that.
+
+> #### Let's Assume we have a wp rest route that is reciving POST login and password data, for authentication and we want to validate the login and password by our own way. Then if it is valid we want to generate a jwt for that user .Then we want to send that jwt with the json reponse .
+
+##### Here is the Example.
+
+```php
+
+<?php
+
+require_once('Jwt_Token.php');
+
+$user = wp_signon(
+    [
+        'user_login' => sanitize_text_field($request['login']),
+        'user_password' => $request['password'],
+        'remember' => true,
+    ],
+    false
+);
+
+if (is_wp_error($user)) {
+
+    return wp_send_json_error(
+        array(
+            "login" => __('Failed', MY_WP_APP_DOMAIN),
+            "errors" => __('Username or password is incorrect', MY_WP_APP_DOMAIN),
+        ),
+        401
+    );
+}
+
+if (isset($user->ID)) {
+    wp_set_current_user($user->ID);
+    wp_set_auth_cookie($user->ID, true, false);
+}
+
+unset($user->user_pass);
+
+
+// $jwt_key_generation 
+// ---------------------------------------
+// JWT part goes here use a new method
+// Generate JWT here
+// save key per user basis
+// save jwt_token per user basis
+// if jwt is not expred then do not create new one
+// if jwt expired create new one
+// if jwt is deleted from user_option Then create a new jwt in 
+// user option
+// ---------------------------------------
+
+# We need to pass the login and password as array there
+$req_arr = array(
+    'login' => sanitize_text_field($request['login']),
+    'password' => $request['password'],
+);
+
+$jwt_token = Wp_Jwt_Auth::get_jwt($user, $req_arr);
+
+$user->jwt_token = $jwt_token;
+
+wp_send_json_success($user);
+
+
+
+```
+
+
+> ### Now If we want to validate the JWT Token then Suppose we Have a Request This way
+
+```php
+<?php
+
+# JWT Token
+$bearer_token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VfZm9yIjoiYXBpX2NhbGwiLCJ1c2VyX2lkIjoxLCJpYXQiOjE2OTE1MDc0OTAsImV4cCI6MTY5MTc2NjY5MH0=.OTkzZWM4MThjZDJhYzY4MjE0MDA1MjZlOWJlNGEyYzM1OWE3MzJjNWU3NjNlYTk0YWE1ZWQ5YjY3MzdiMWNhMg==';
+
+// API endpoint URL
+$api_url = 'http://localhost/wp_dev/wp-json/my-wp-app/v1/check';
+
+// Initialize cURL session
+$ch = curl_init();
+
+// Set cURL options
+curl_setopt($ch, CURLOPT_URL, $api_url);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+// Set the Authorization header with the Bearer token
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+    'Authorization: Bearer ' . $bearer_token,
+));
+
+// Execute the cURL session
+$response = curl_exec($ch);
+
+// Check for cURL errors
+if (curl_errno($ch)) {
+    echo 'cURL Error: ' . curl_error($ch);
+}
+
+// Close the cURL session
+curl_close($ch);
+
+// Process the API response
+echo $response;
+
+```
+
+> ### Now We can Validate the Request This way
+
+```php
+
+<?php
+
+#--------------------------------------------------------------
+# Checking Jwt Auth
+#--------------------------------------------------------------
+
+if (is_wp_error(Wp_Jwt_Auth::jwt_auth_check())) {
+
+    return wp_send_json_error(Wp_Jwt_Auth::jwt_auth_check());
+}
+
+$user_id = Wp_Jwt_Auth::jwt_auth_check();
+
+#--------------------------------------------------------------
+# End Jwt Auth Checking
+#-------------------------------------------------------------- 
+
+
+
+```
+
+> ### If we do not need the payload user_id Then We can Do This way
+
+```php
+
+<?php
+
+#--------------------------------------------------------------
+# Checking Jwt Auth
+#--------------------------------------------------------------
+
+if (is_wp_error(Wp_Jwt_Auth::jwt_auth_check())) {
+
+    return wp_send_json_error(Wp_Jwt_Auth::jwt_auth_check());
+}
+
+#--------------------------------------------------------------
+# End Jwt Auth Checking
+#-------------------------------------------------------------- 
+
+```
+
 >>> #### Happy coding .
