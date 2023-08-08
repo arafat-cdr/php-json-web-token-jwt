@@ -180,6 +180,52 @@ Let's see how to do that.
 
 ##### Here is the Example.
 
+
+>#### First We are sending Post Request with data
+
+```php
+<?php
+// URL to which you want to send the POST request
+$url = 'http://localhost/wp_dev/wp-json/my-wp-app/v1/login-user';
+
+// Data to be sent in the POST request
+$data = array(
+    'login' => 'arafat',
+    'password' => 'arafat'
+);
+
+// Initialize cURL session
+$ch = curl_init();
+
+// Set cURL options
+curl_setopt($ch, CURLOPT_URL, $url);
+curl_setopt($ch, CURLOPT_POST, 1);
+curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+// Execute the cURL session and get the response
+$response = curl_exec($ch);
+
+// Check for cURL errors
+if (curl_errno($ch)) {
+    echo 'cURL Error: ' . curl_error($ch);
+}
+
+// Close cURL session
+curl_close($ch);
+
+// Process the response
+if ($response) {
+    echo $response;
+} else {
+    echo 'Error occurred during the request.';
+}
+
+```
+
+
+> ### Then We are Processing that Api POST Request This way: 
+
 ```php
 
 <?php
