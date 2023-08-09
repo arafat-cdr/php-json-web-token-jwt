@@ -116,7 +116,7 @@ class Wp_Jwt_Auth{
 	        # Jwt is is Expired or Invalid
 	        if( $jwt_is_valid['error'] == 1 ){
 	            # Create new KEY and JWT
-	            $jwt = $this->generate_and_save_jwt($user, $request);
+	            $jwt = self::generate_and_save_jwt($user, $request);
 	            return $jwt;
 	        }
 
@@ -129,7 +129,7 @@ class Wp_Jwt_Auth{
 	    # User meta for jwt not found
 	    # it may not created yet or deleted
 	    # Create the KEY and JWT token now
-	    $jwt = $this->generate_and_save_jwt($user, $request);
+	    $jwt = self::generate_and_save_jwt($user, $request);
 	    return $jwt;
 
 	}
